@@ -1,0 +1,24 @@
+# Test for project 1
+
+import sys
+import cx_Oracle 
+import getpass
+
+def connectOracle():
+	user = input("Username: ")
+	password = getpass.getpass()
+	conTry = ''+user+'/' + password + '@gwynne.cs.ualberta.ca:1521/CRS'
+	try:
+		connection = cx_Orcale.connect(conTry)
+		return 1
+	except:
+		return 0
+def main():
+	conAct = connectOracle()
+	while conAct == 0:
+		print("Incorrect login")
+	print("Pass")
+
+		
+
+	

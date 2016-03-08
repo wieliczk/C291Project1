@@ -1,0 +1,3 @@
+a2_setup_new.sql used to drop and create tables in database
+
+the 5 options each have their own .py file that handles each function seperatly 
