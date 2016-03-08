@@ -3,37 +3,40 @@
 
 import cx_Oracle
 import sys
+import userInput
 
-def setupVehicleReg(loginString):
+def isValidVehicleType(conn, type_id):
+	# TODO: use database
+	return False
+
+def setupVehicleRegImpl(conn):
 	print("\nNew Vehicle Registration\n")
-	serial_no = input("Enter Vehicle serial #: ")
-	maker = input("Enter Vehicle maker name: ")
-	model = input("Enter Vehicle model name: ")
-	color = input("Enter Vehicle color: ")
-	typeOfCar = input("Enter vehicle type: ")
-	checks = 0
-	while checks == 0:
-		try:
-			year = int(input("Enter Vehicle year: "))
-			checks = 2
-			while checks == 2:
-				try:
-					type_id = int(input("Vehicle type_id: "))
-					checks = 1
-				except: 
-					print("Improper Enter, enter a number" )
-		except:
-			print("Improper Entry, enter a number: ")
+
+	# Basic fields with no validation needed
+	serial_no = userInput.getNonEmptyInput("Enter Vehicle serial #: ")
+	maker = userInput.getNonEmptyInput("Enter Vehicle maker name: ")
+	model = userInput.getNonEmptyInput("Enter Vehicle model name: ")
+	color = userInput.getNonEmptyInput("Enter Vehicle color: ")
+
+	# TODO: Must validate 
+	typeId = userInput.getValidatedInput("Enter Vehicle type: ", 
+		lambda result: isValidVehicleType(conn, result))
+
+	year = userInput.getIntegerInput("Enter Vehicle year: ")
+
 	owner_id = input("Enter Owner SIN: ")
-	checks = 0
-	while checks == 0:
-		primaryOwn = input("Primary Owner (y) or (n): ")
-		if len(primaryOwn) == 1 and primaryOwn in ["y","n","Y","N"]:
-			checks = 1
-		else:
-			print("Invalid input")
+	primaryOwner = userInput.getYesNoInput("Primary Owner (y) or (n): ")
+
 	print("All info got!")
 	# TODO connect to orcale and pass information in
+
+# Set up vehicle registration 
+def setupVehicleReg(conn):
+	try:
+		setupVehicleRegImpl(conn)
+	except KeyboardInterrupt:
+		print("\n\n<<< Canceled add >>>\n")
+		return
 
 def main():
 	setupVehicleReg("test")
