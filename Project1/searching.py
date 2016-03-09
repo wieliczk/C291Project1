@@ -14,6 +14,9 @@ def searchOption(logString):
 		violationRecords(logString)
 	else:
 		vehicleHist(logString)  
+
+
+	pass
 def getChoice():
 	print("Choose option:\n" \
 	      "(1): Get personal information by licence or name\n" \
@@ -31,17 +34,128 @@ def getChoice():
 			print("Invalid Entry\n")
 	return chooses
 
+
+
+
+# TODO query using licence no
+
 def personalInfo(logString):
 	print("Personal Info\n")
-	# TODO query using licence_no or name
+
+	#lets us repeat searches until user stops us
+	quitcheck = 1
+	while quitcheck == 1:
+		try:
+			#chooses lets user decide to search by username or licence number
+			chooses = int(input("(1): Search by name\n(2): Search by licence\n(3)Quit"))
+			if chooses == 1:
+				searchBy = str(input(("Enter name to search: ")))
+				# TODO query using the searchBy
+
+				searchBy = None #wipes stored value for searchBy
+				chooses == None #wipes the previous entry for chooses
+				break
+
+
+			elif chooses == 2:
+				while TRUE:
+					try:
+						searchBy = int(input(("Enter licence number to search: ")))
+						# TODO query using the searchBy
+						
+						searchBy = None
+						chooses = None
+						break
+					except:
+						print("Not a valid number")
+
+			elif chooses == 3:
+				quitcheck = 0
+				break
+
+		except:
+			print("Invalid entry")
+	
+
+
+	
+
+
+
+
+
 
 def violationRecords(logString):
 	print("Violation Records\n")
 	# TODO query using licence_no or SIN
+	quitcheck = 1
+		while quitcheck == 1:
+			try:
+				#chooses lets user decide to search by username or licence number
+				chooses = int(input("(1): Search by SIN\n(2): Search by licence\n(3)Quit"))
+				if chooses == 1:
+					while TRUE:
+						try:
+							searchBy = int(input(("Enter licence number to search: ")))
+							# TODO query using the SearchBy
+							searchBy = None
+							chooses = None
+							break
+						except:
+							print("Not a valid number")
+
+
+				elif chooses == 2:
+					while TRUE:
+						try:
+							searchBy = int(input(("Enter licence number to search: ")))
+							# TODO query using the searchBy
+							
+							searchBy = None
+							chooses = None
+							break
+						except:
+							print("Not a valid number")
+
+				elif chooses == 3:
+					quitcheck = 0
+					break
+
+			except:
+				print("Invalid entry")
+	
+
+
+
+
 
 def vehicleHist(logString):
 	print("Vehicle History\n")
 	# TODO query using vehicle serial number
+	quitcheck = 1
+	while quitcheck == 1:
+			try:
+				#chooses lets user decide to search or quit
+				chooses = int(input("(1): Search by Vehicle ID\n(2): Quit"))
+				if chooses == 1:
+					while TRUE:
+						try:
+							searchBy = int(input(("Enter Vehicle ID to search: ")))
+							# TODO query using the searchBy
+						
+							searchBy = None
+							chooses = None
+							break
+						except:
+							print("Not a valid number")
+
+
+				elif chooses == 2:
+					quitcheck = 0
+
+
+
+
 
 def main():
 	searchOption("Test")

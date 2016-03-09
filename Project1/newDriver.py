@@ -16,6 +16,7 @@ def setupDriver(logString):
 	# Should Licence be generated and not typed in? 
 	licenceNo = input("Enter Licence number: ") 
 	# TODO check if licence number is already in database 
+	# TODO check if licence type+SIN is unique (only one licence per class)
 	# TODO add into Database
 	
 	
