@@ -5,27 +5,54 @@ import cx_Oracle
 import sys
 import userInput
 
-def isValidVehicleType(conn, type_id):
-	# TODO: use database
-	return False
+def isValidSerialNo(conn, serial):
+	# Must not be empty
+	if serial == "":
+		return "Serial number must not be empty"
+
+	# Serial Must not exist yet
+	curs = conn.cursor()
+	curs.execute("SELECT count(*) FROM vehicle WHERE serial_no = '%s'" % serial)
+	if curs.fetchall()[0][0] != 0:
+		return "Serial number already registered"
+
+	return True
+
+
+def isValidVehicleType(conn, vtype):
+	curs = conn.cursor()
+	curs.execute("SELECT count(*) FROM vehicle_type WHERE type = '%s'" % vtype)
+	if curs.fetchall()[0][0] > 0:
+		return True
+	else:
+		return "Not a valid vehicle type"
+	
 
 def setupVehicleRegImpl(conn):
 	print("\nNew Vehicle Registration\n")
 
-	# TODO make sure serial_no not in database, return invalid serial no
-	serial_no = userInput.getNonEmptyInput("Enter Vehicle serial #: ")
+	# Serial number (must be unique)
+	serial_no = userInput.getValidatedInput("Enter Vehicle serial #: ",
+		lambda result: isValidSerialNo(conn, result))
 
-	# Basic fields with no validation needed
+	# Validated vehicle type (type must exist)
+	typeId = userInput.getValidatedInput("Enter Vehicle type: ", 
+		lambda result: isValidVehicleType(conn, result))
+
+	# Other easy inputs
 	maker = userInput.getNonEmptyInput("Enter Vehicle maker name: ")
 	model = userInput.getNonEmptyInput("Enter Vehicle model name: ")
 	color = userInput.getNonEmptyInput("Enter Vehicle color: ")
 
-	# TODO: Must validate, return invalid vehicle type
-	typeId = userInput.getValidatedInput("Enter Vehicle type: ", 
-		lambda result: isValidVehicleType(conn, result))
-
+	# TODO: Validate further
 	year = userInput.getIntegerInput("Enter Vehicle year: ")
 
+	# All good insert the item
+	curs = conn.cursor()
+	curs.execute("INSERT INTO vehicle VALUES "
+		"('%s', '%s', '%s', );")
+
+	# Owners
 	owner_id = input("Enter Owner SIN: ")
 	primaryOwner = userInput.getYesNoInput("Primary Owner (y) or (n): ")
 

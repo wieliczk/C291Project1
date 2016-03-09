@@ -33,10 +33,11 @@ def getIntegerInput(prompt):
 def getValidatedInput(prompt, validFunc):
 	while True:
 		result = input(prompt)
-		if validFunc(result):
+		isValid = validFunc(result)
+		if isValid == True:
 			return result
 		else:
-			print("Error: Value entered was not valid")
+			print("Error: " + isValid)
 
 # getYesNoInput()
 #	Prompt the user for a yes/no input. 
