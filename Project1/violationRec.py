@@ -16,11 +16,14 @@ def recordTicket(logString):
 		try:
 			ticketID = int(input("Create Ticket ID: "))
 			checks = 1
+
 		except:
 			print("Enter Int\n")
 	ticketPlace = input("Where the ticket occurred: ") 
 	description = input("Description for ticket: ")
 	# TODO add oracle queries 
+	# TODO make sure ticket ID is unique
+	
 
 def main():
 	recordTicket("Test")

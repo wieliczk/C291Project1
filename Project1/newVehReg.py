@@ -12,13 +12,15 @@ def isValidVehicleType(conn, type_id):
 def setupVehicleRegImpl(conn):
 	print("\nNew Vehicle Registration\n")
 
-	# Basic fields with no validation needed
+	# TODO make sure serial_no not in database, return invalid serial no
 	serial_no = userInput.getNonEmptyInput("Enter Vehicle serial #: ")
+
+	# Basic fields with no validation needed
 	maker = userInput.getNonEmptyInput("Enter Vehicle maker name: ")
 	model = userInput.getNonEmptyInput("Enter Vehicle model name: ")
 	color = userInput.getNonEmptyInput("Enter Vehicle color: ")
 
-	# TODO: Must validate 
+	# TODO: Must validate, return invalid vehicle type
 	typeId = userInput.getValidatedInput("Enter Vehicle type: ", 
 		lambda result: isValidVehicleType(conn, result))
 
@@ -28,7 +30,7 @@ def setupVehicleRegImpl(conn):
 	primaryOwner = userInput.getYesNoInput("Primary Owner (y) or (n): ")
 
 	print("All info got!")
-	# TODO connect to orcale and pass information in
+	# TODO connect to oracle and pass information in
 
 # Set up vehicle registration 
 def setupVehicleReg(conn):
