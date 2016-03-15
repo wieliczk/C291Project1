@@ -47,17 +47,17 @@ def personalInfo(logString):
 	while quitcheck == 1:
 		try:
 			#chooses lets user decide to search by username or licence number
-			chooses = int(input("(1): Search by name\n(2): Search by licence\n(3)Quit"))
+			chooses = int(input("(1): Search by name\n(2): Search by licence\n(3): Quit\n"))
 			if chooses == 1:
 				searchBy = str(input(("Enter name to search: ")))
 				# TODO query using the searchBy
 
 				searchBy = None #wipes stored value for searchBy
 				chooses == None #wipes the previous entry for chooses
-				break
+				
 
 
-			elif chooses == 2:
+			if chooses == 2:
 				while chooses == 2:
 					try:
 						searchBy = int(input(("Enter licence number to search: ")))
@@ -69,7 +69,7 @@ def personalInfo(logString):
 					except:
 						print("Not a valid number")
 
-			elif chooses == 3:
+			if chooses == 3:
 				quitcheck = 0
 				break
 
@@ -89,40 +89,37 @@ def violationRecords(logString):
 	print("Violation Records\n")
 	# TODO query using licence_no or SIN
 	quitcheck = 1
-		while quitcheck == 1:
-			try:
-				#chooses lets user decide to search by username or licence number
-				chooses = int(input("(1): Search by SIN\n(2): Search by licence\n(3)Quit"))
-				if chooses == 1:
-					while chooses == 1:
-						try:
-							searchBy = int(input(("Enter licence number to search: ")))
-							# TODO query using the SearchBy
-							searchBy = None
-							chooses = None
-							break
-						except:
-							print("Not a valid number")
+	while quitcheck == 1:
+		try:
+			#chooses lets user decide to search by username or licence number
+			chooses = int(input("(1): Search by SIN\n(2): Search by licence\n(3): Quit\n"))
+			if chooses == 1:
+				while chooses == 1:
+					try:
+						searchBy = int(input(("Enter SIN number to search: ")))
+						# TODO query using the SearchBy
+						searchBy = None
+						chooses = None
+						break
+					except:
+						print("Not a valid number")
 
-
-				if chooses == 2:
-					while chooses == 2:
-						try:
-							searchBy = int(input(("Enter licence number to search: ")))
-							# TODO query using the searchBy
-							
-							searchBy = None
-							chooses = None
-							break
-						except:
-							print("Not a valid number")
-
-				elif chooses == 3:
-					quitcheck = 0
-					break
-
-			except:
-				print("Invalid entry")
+			if chooses == 2:
+				while chooses == 2:
+					try:
+						searchBy = int(input(("Enter licence number to search: ")))
+						# TODO query using the searchBy
+						
+						searchBy = None
+						chooses = None
+						break
+					except:
+						print("Not a valid number")
+			elif chooses == 3:
+				quitcheck = 0
+				break
+		except:
+			print("Invalid entry")
 	
 
 
@@ -134,26 +131,27 @@ def vehicleHist(logString):
 	# TODO query using vehicle serial number
 	quitcheck = 1
 	while quitcheck == 1:
-			try:
-				#chooses lets user decide to search or quit
-				chooses = int(input("(1): Search by Vehicle ID\n(2): Quit"))
-				if chooses == 1:
-					while chooses == 1:
-						try:
-							searchBy = int(input(("Enter Vehicle ID to search: ")))
-							# TODO query using the searchBy
+		try:
+			#chooses lets user decide to search or quit
+			chooses = int(input("(1): Search by Vehicle ID\n(2): Quit\n"))
+			if chooses == 1:
+				while chooses == 1:
+					try:
+						searchBy = int(input(("Enter Vehicle ID to search: ")))
+						# TODO query using the searchBy
 						
-							searchBy = None
-							chooses = None
-							break
-						except:
-							print("Not a valid number")
+						searchBy = None
+						chooses = None
+						break
+					except:
+						print("Not a valid number")
 
 
-				elif chooses == 2:
-					quitcheck = 0
+			elif chooses == 2:
+				quitcheck = 0
 
-
+		except:
+				print("Not a valid choice")
 
 
 

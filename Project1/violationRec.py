@@ -20,7 +20,7 @@ def recordTicket(logString):
 		violatID = input("Violator ID: ")
 		try:
 			#query if violatID is in SIN numbers
-			validation check = 1
+			validationCheck = 1
 		except:
 			print("SIN number not in database")
 
