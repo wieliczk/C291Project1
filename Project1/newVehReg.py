@@ -52,7 +52,7 @@ def setupVehicleRegImpl(conn):
 	curs.execute("INSERT INTO vehicle VALUES "
 		"('%s', '%s', '%s', );")
 
-	# Owners
+	# Owners, repeat until enters q. If driver doesnt exist return message and ask to add to database
 	owner_id = input("Enter Owner SIN: ")
 	primaryOwner = userInput.getYesNoInput("Primary Owner (y) or (n): ")
 

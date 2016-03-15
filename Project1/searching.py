@@ -58,7 +58,7 @@ def personalInfo(logString):
 
 
 			elif chooses == 2:
-				while TRUE:
+				while chooses == 2:
 					try:
 						searchBy = int(input(("Enter licence number to search: ")))
 						# TODO query using the searchBy
@@ -94,7 +94,7 @@ def violationRecords(logString):
 				#chooses lets user decide to search by username or licence number
 				chooses = int(input("(1): Search by SIN\n(2): Search by licence\n(3)Quit"))
 				if chooses == 1:
-					while TRUE:
+					while chooses == 1:
 						try:
 							searchBy = int(input(("Enter licence number to search: ")))
 							# TODO query using the SearchBy
@@ -105,8 +105,8 @@ def violationRecords(logString):
 							print("Not a valid number")
 
 
-				elif chooses == 2:
-					while TRUE:
+				if chooses == 2:
+					while chooses == 2:
 						try:
 							searchBy = int(input(("Enter licence number to search: ")))
 							# TODO query using the searchBy
@@ -138,7 +138,7 @@ def vehicleHist(logString):
 				#chooses lets user decide to search or quit
 				chooses = int(input("(1): Search by Vehicle ID\n(2): Quit"))
 				if chooses == 1:
-					while TRUE:
+					while chooses == 1:
 						try:
 							searchBy = int(input(("Enter Vehicle ID to search: ")))
 							# TODO query using the searchBy

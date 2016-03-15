@@ -2,12 +2,36 @@
 import cx_Oracle
 import datetime
 
+
+def isValidVehicleType(conn, vtype):
+	curs = conn.cursor()
+	curs.execute("SELECT count(*) FROM vehicle_type WHERE type = '%s'" % vtype)
+	if curs.fetchall()[0][0] > 0:
+		return True
+	else:
+		return "Not a valid vehicle type"
+	
+# TODO, add a way to auto include primary driver of a vehicle instead of taking input
+
 def recordTicket(logString):
 	# Violator id and office id are SIN's
-	violatID = input("Violator ID: ")
+	validationCheck =0
+	while validationCheck == 0:
+		violatID = input("Violator ID: ")
+		try:
+			#query if violatID is in SIN numbers
+			validation check = 1
+		except:
+			print("SIN number not in database")
+
+	#TODO, same violation check for each necessary variable
+	#Is officer ID a SIN number
+
 	officeID = input("Officer ID: ")
+	
 	# Vehicle ID is vehicle serial number
 	vehicleID = input("Vehicle Serial Number: ")
+	
 	# Vtype is from ticket type 
 	vtype = input("Ticket type: ")
 	ticketDate = datetime.date.today()

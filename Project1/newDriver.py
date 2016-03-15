@@ -15,6 +15,7 @@ def setupDriver(logString):
 	# TODO Add picture to insert into blob
 	# Should Licence be generated and not typed in? 
 	licenceNo = input("Enter Licence number: ") 
+	# TODO check if SIN doesn't exist and ask to add to database
 	# TODO check if licence number is already in database 
 	# TODO check if licence type+SIN is unique (only one licence per class)
 	# TODO add into Database
