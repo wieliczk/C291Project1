@@ -5,7 +5,8 @@
 # 3) Use vehicle serial number to see all violations its a part of 
 
 import cx_Oracle
-
+import sys
+import userInput
 
 def searchOption(logString):
 	intChoice = getChoice()
@@ -36,11 +37,74 @@ def getChoice():
 
 	# TODO query using licence no
 
+#search for person info by name
+def personalByName(conn, name):
+	curs = conn.cursor()
+	curs.execute("SELECT * FROM people, drive_licence WHERE name like '%%%s%%';" % name)
+	if curs.fetchall()[0][0] > 0:
+		for row in curs.fetchall():
+			print(row)
+	else:
+		return "No matching results"
+
+#search for person info by licence
+def personalByLicence(conn, licence):
+	curs = conn.cursor()
+	curs.execute("SELECT * FROM people, drive_licence WHERE people.sin=drive_licence.sin and licence_no = '%s';" %licence)
+	if curs.fetchall()[0][0] > 0:
+		for row in curs.fetchall():
+			print (row)
+	else:
+		return "No matching results"
+
+#search for violation info by SIN
+def violationBySin(conn, sin):
+	curs=conn.cursor()
+	curs.execute("SELECT name, sin, ticket_no, licence_no, vtype FROM ticket, people WHERE violator_no=sin and sin='%s';" % sin)
+	if curs.fetchall()[0][0] > 0:
+		for row in curs.fetchall():
+			print (row)
+	else:
+		return "No matching results"
+
+#search for violation info by licence
+def violationByLicence(conn, licence):
+	curs=conn.cursor()
+	curs.execute("select name, sin, ticket_no, licence_no, vtype FROM ticket, people, drive_licence where peolpe.sin=drive_licence.sin and people.sin=violator_no and licence_no='%s';" % licence)
+	if curs.fetchall()[0][0] > 0:
+		for row in curs.fetchall():
+			print(row)
+	else:
+		return "No matching results"
+
+
+#vehicle history searching given vehicle serial
+def vehicleHistSearch(conn, vehicleID):
+	curs=conn.cursor()
+	#counts number of tickets vehicle has received
+	curs.execute("SELECT count(ticket_no) FROM ticket WHERE vehicle_id='%s';" %vehicleID)
+	if curs.fetchone() > 0:
+		print("Vehicle has received '%s' tickets\n" % curs.fetchone)
+	else:
+		print("Vehicle has received no tickets\n")
+
+	#counts number of sales cars been involved in
+	curs.execute("SELECT count(transaction_id) from auto_sale WHERE vehicle_id='%s';" %vehicleID)
+	if curs.fetchone() > 0:
+		print ("Car involved in '%s' transactions" %curs.fetchone())
+	else:
+		print ("Not involved in any sales")
+		return True #ends vehicle search, no sales means no average
+	#finds average sale price for vehicle
+	curs.execute("SELECT avg(price) from auto_sale where vehicle_id='%s';" %vehicleID)
+	print(curs.fetchone())
+
+
+
 
 
 def personalInfo(logString):
 	print("Personal Info\n")
-
 	#lets us repeat searches until user stops us
 	quitcheck = 1
 	while quitcheck == 1:
@@ -49,16 +113,10 @@ def personalInfo(logString):
 			chooses = int(input("(1): Search by name\n(2): Search by licence\n(3): Quit\n"))
 			if chooses == 1:
 				searchBy = str(input(("Enter name to search: \n")))
+				searchBy=searchBy.lower()
+				personalByName(conn, searchBy)
 				# TODO check if we need to do more precise query to get diff people with same name or less info
-				#curs = connection.cursor()
-				#curs.execute("SELECT * from people, drive_licence WHERE name like '%%%s%%';" % searchBy)
-				#Like searches for all names with subsets: aka Joa A, Joe B, Joe K
-				#for row in curs:
-					#print the resulting rows
-				#	print(row)
-				#curs.close()
 				# TODO does it matter if the result has their licence_no included? prob not
-				
 				searchBy = None #wipes stored value for searchBy
 				chooses == None #wipes the previous entry for chooses
 				
@@ -68,15 +126,12 @@ def personalInfo(logString):
 				while chooses == 2:
 					try:
 						searchBy = int(input(("Enter licence number to search: ")))
-						#curs = connection.cursor()
-						#curs.execute("SELECT * from people, drive_licence WHERE people.sin=drive_licence.sin and licence_no='%s';" % searchBy)
-						#for row in curs:
-							#print(row)
-						#curs.close()
+						personalByLicence(conn, searchBy)
 						searchBy = None
 						chooses = None
 						break
-					except:
+					except Exception as e:
+						print(e)
 						print("Not a valid number")
 
 			if chooses == 3:
@@ -85,7 +140,7 @@ def personalInfo(logString):
 
 		except Exception as e:
 			print(e)
-			#print("Invalid entry")
+			print("Invalid entry")
 	
 
 
@@ -98,7 +153,6 @@ def personalInfo(logString):
 
 def violationRecords(logString):
 	print("Violation Records\n")
-	# TODO query using licence_no or SIN
 	quitcheck = 1
 	while quitcheck == 1:
 		try:
@@ -108,30 +162,22 @@ def violationRecords(logString):
 				while chooses == 1:
 					try:
 						searchBy = int(input(("Enter SIN number to search: ")))
-						#curs = connection.cursor()
-						#curs.execute("select name, sin, ticket_no from ticket, people where violator_no=sin and sin='%s';" % searchBy)
-						#for row in curs:
-							#print(row)
-						#curs.close()
+						violationBySin(conn, searchBy)
 						searchBy = None
 						chooses = None
 						break
-					except:
+					except ValueError:
 						print("Not a valid number")
 
 			if chooses == 2:
 				while chooses == 2:
 					try:
 						searchBy = int(input(("Enter licence number to search: ")))
-						#curs = connection.cursor()
-						#curs.execute("select name, ticket_no, licence_no from ticket, people, drive_licence where peolpe.sin=drive_licence.sin and people.sin=violator_no and licence_no='%s';" % searchBy)
-						#for row in curs:
-							#print(row)
-						#curs.close()						
+						violationByLicence(conn, licence)				
 						searchBy = None
 						chooses = None
 						break
-					except:
+					except ValueError:
 						print("Not a valid number")
 			elif chooses == 3:
 				quitcheck = 0
@@ -139,26 +185,6 @@ def violationRecords(logString):
 		except:
 			print("Invalid entry")
 	
-
-
-			elif chooses == 2:
-				while TRUE:
-					try:
-						searchBy = int(input(("Enter licence number to search: ")))
-						# TODO query using the searchBy
-						
-						searchBy = None
-						chooses = None
-						break
-					except:
-						print("Not a valid number")
-
-			elif chooses == 3:
-				quitcheck = 0
-				break
-
-		except:
-			print("Invalid entry")
 	
 
 def vehicleHist(logString):
@@ -173,18 +199,11 @@ def vehicleHist(logString):
 				while chooses == 1:
 					try:
 						searchBy = int(input(("Enter Vehicle ID to search: ")))
-						#curs = connection.cursor()
-						#curs.execute(='%s';" % searchBy)
-						# TODO select count(number of autosales) where vehicle_id=serial_no
-						# TODO select count(number of violations) where serial_no=vehicle_id
-						# TODO select avg of auto_sale.price
-						#for row in curs:
-							#print(row)
-						#curs.close()						
+						vehicleHistSearch(conn, searchBy)
 						searchBy = None
 						chooses = None
 						break
-					except:
+					except ValueError:
 						print("Not a valid number")
 
 			elif chooses == 2:
