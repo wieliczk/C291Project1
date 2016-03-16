@@ -5,7 +5,7 @@ import datetime
 
 def isValidVehicleType(conn, vtype):
 	curs = conn.cursor()
-	curs.execute("SELECT count(*) FROM vehicle_type WHERE type = '%s'" % vtype)
+	curs.execute("SELECT count(*) FROM vehicle_type WHERE name = '%s'" % vtype)
 	if curs.fetchall()[0][0] > 0:
 		return True
 	else:
