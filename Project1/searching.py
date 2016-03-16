@@ -17,7 +17,6 @@ def searchOption(logString):
 		vehicleHist(logString)  
 
 
-	pass
 def getChoice():
 	print("Choose option:\n" \
 	      "(1): Get personal information by licence or name\n" \
@@ -35,10 +34,9 @@ def getChoice():
 			print("Invalid Entry\n")
 	return chooses
 
+	# TODO query using licence no
 
 
-
-# TODO query using licence no
 
 def personalInfo(logString):
 	print("Personal Info\n")
@@ -143,8 +141,25 @@ def violationRecords(logString):
 	
 
 
+			elif chooses == 2:
+				while TRUE:
+					try:
+						searchBy = int(input(("Enter licence number to search: ")))
+						# TODO query using the searchBy
+						
+						searchBy = None
+						chooses = None
+						break
+					except:
+						print("Not a valid number")
 
+			elif chooses == 3:
+				quitcheck = 0
+				break
 
+		except:
+			print("Invalid entry")
+	
 
 def vehicleHist(logString):
 	print("Vehicle History\n")
@@ -172,14 +187,11 @@ def vehicleHist(logString):
 					except:
 						print("Not a valid number")
 
-
 			elif chooses == 2:
 				quitcheck = 0
 
 		except:
 				print("Not a valid choice")
-
-
 
 def main():
 	searchOption("Test")

@@ -1,10 +1,12 @@
 import getpass
+import re
 
 # getPassword()
 #	Asks the user for a password
 #	Returns: The password
 def getPassword():
 	return getpass.getpass()
+
 
 # getNonEmptyInput()
 #	Prompt the user for an input which can't be empty, and repeat asking for
@@ -15,6 +17,7 @@ def getNonEmptyInput(prompt):
 		if result != "":
 			return result
 		print("Error: This input may not be empty.")
+
 
 # getIntegerInput()
 #	Prompt the user for an input which must be an integer
@@ -27,6 +30,7 @@ def getIntegerInput(prompt):
 		except ValueError:
 			print("Error: Value entered was not a number")
 
+
 # getValidatedInput()
 #	Prompt the user for an input with a custom function to check for
 #	a valid input.
@@ -38,6 +42,7 @@ def getValidatedInput(prompt, validFunc):
 			return result
 		else:
 			print("Error: " + isValid)
+
 
 # getYesNoInput()
 #	Prompt the user for a yes/no input. 
@@ -52,6 +57,20 @@ def getYesNoInput(prompt):
 		else:
 			print("Error: `y' or `n' expected.")
 
+
+# getDateInput()
+#	Prompt the user for a date input
+#	Returns: The date as a string in yyyy/mm/dd format
+def getDateInput(prompt):
+	while True:
+		result = input(prompt).lower()
+		if re.findall(r"""\d{4}/\d{2}/\d{2}""", result):
+			return result
+		else:
+			print("Error: Date in the yyyy/mm/dd format expected.")
+
+
+
 # getUsernameAndPassword()
 #	Asks the user for a username and password
 #	Returns: username, password
@@ -64,4 +83,6 @@ def getUsernameAndPassword():
 
 	# Return them
 	return user, password
+
+
 

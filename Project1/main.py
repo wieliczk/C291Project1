@@ -59,7 +59,7 @@ def main():
 		elif intchose == 2:
 			newDriver.setupDriver(connection)		
 		elif intchose == 3:
-			autoTran.autoTrans(connection)
+			autoTran.performTransaction(connection)
 		elif intchose == 4: 
 			violationRec.recordTicket(connection)
 		else:
