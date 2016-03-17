@@ -26,6 +26,8 @@ def isLicenceNumberValid(conn, number):
 
 # Does a file contain a photo?
 def isValidPhotoFile(fileName):
+	if fileName == "":
+		return True
 	try:
 		open(fileName, 'r')
 		return True
@@ -78,30 +80,52 @@ def addDriver(conn, sin):
 	licence_class = userInput.getNonEmptyInput("Class: ")
 
 	# Photo
-	photo = userInput.getValidatedInput("Photo file: ",
+	photo = userInput.getValidatedInput("Photo file (leave empty if none): ",
 		lambda result: isValidPhotoFile(result))
 	
 	# Issue and Expiry dates
 	issue_date = userInput.getDateInput("Issue Date (yyyy/mm/dd): ")
 	expiry_date = userInput.getDateInput("Expiry Date (yyyy/mm/dd): ")
 
-	# TODO: expiry date should not take input, just take issued date and add 5 years
+	# Restrictions
+	restriction_list = []
+	while True:
+		restrict = userInput.getNonEmptyInput(
+			"Add a driving restriction (done if no more): ")
+
+		if restrict.lower() == "done":
+			break
+		else:
+			restriction_list.append(restrict)
 
 	curs = conn.cursor()
 
-	# Read in the photo data
-	
-	photo_data = open(photo, 'rb').read()
+	# Save photo if exists
 	photo_var = curs.var(cx_Oracle.BLOB)
-	photo_var.setvalue(0, photo_data)
-	#if photo not found, 
+	if photo != "":		
+		photo_data = open(photo, 'rb').read()
+		photo_var.setvalue(0, photo_data)
 
+	# Add the licence
 	curs.execute("INSERT INTO drive_licence VALUES "
 		"'%s', '%s', '%s', :photo, to_date('%s', 'yyyy/mm/dd'), to_date('%s', 'yyyy/mm/dd')" % 
 		(licence_no, regist_sin, licence_class, issue_date, expiry_date),
 		photo = photo_var)
 
+	# Add restrictions
+	next_condition_id = curs.execute("SELECT max(c_id)+1 FROM driving_condition").fetchall()[0][0]
+	if next_condition_id == None:
+		next_condition_id = 0
+	for restrict in restriction_list:
+		curs.execute("INSERT INTO driving_condition VALUES "
+			"(%d, '%s')" % (next_condition_id, restrict))
+		curs.execute("INSERT INTO restriction VALUES "
+			"('%s', %d)" % (licence_no, next_condition_id))
+		next_condition_id = next_condition_id + 1
 
+	conn.commit()
+
+	print("<<< Driver Licence Registered >>>\n\n")
 
 # 
 def newDriver(conn):

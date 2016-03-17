@@ -105,6 +105,8 @@ def performTransactionImpl(conn):
 	# Get the next txid
 	curs = conn.cursor()
 	txid = curs.execute("SELECT max(transaction_id)+1 FROM auto_sale").fetchall()[0][0]
+	if txid == None:
+		txid = 0
 
 	# Add the transaction
 	curs.execute(

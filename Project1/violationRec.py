@@ -52,27 +52,47 @@ def isValidTicketID(conn, ticketID):
 	else:
 		return False
 
+#
+def isValidViolator(conn, vehicle, sin):
+	if sin == "":
+		if vehicle.getPrimaryOwner(conn, vehicle):
+			return True
+		else
+			return "Vehicle has no primary owner, must specify an owner"
+	else:
+		if person.checkExists(conn, sin):
+			return True
+		else:
+			return "That person is not registered"
+
+
+#
+def isValidOfficer(conn, sin):
+	
+
+
+
 # recordTicket
 # Main fuction to record a violation
 # Collects User inputs validating the ones that need to be checked
 # Once everything is correct adds to ticket
 # Note: Once you start process, there is not way to get out
-def recordTicket(conn):
-	# Violator id and office id are SIN's
-	validationCheck =0
-	while validationCheck == 0:
-		violatID = userInput.getIntegerInput("Violator ID (00 to quit): ")
-		try:
-			if not person.checkExists(conn, violatID):
-				if violatID == 00:
-					validationCheck = 9
-				else:
-					print("Incorrect Sin")
-				
-			else:
-				validationCheck = 1
-		except:
-			print("SIN number not in database")
+def recordTicketImpl(conn):
+	# First get VIN
+	vin = userInput.getValidatedInput(
+		"Enter serial no of vehicle recieving violation:",
+		lambda result: isValidSerialNo(conn, result))
+
+	# Now, get the violator, or none
+	violator_sin = userInput.getValidatedInput(
+		"Enter the violator SIN (leave blank to default to a primary owner): ",
+		lambda result: isValidViolator(conn, vin, result))
+	
+	# Get the officer
+	officer_sin = userInput.getValidatedInput(
+		"Enter the recording officer SIN: ",
+		lambda result: )
+
 
 	while validationCheck == 1:
 		officerID = userInput.getIntegerInput("Officer ID: ")
@@ -125,9 +145,9 @@ def recordTicket(conn):
 	else:
 		print("<<< Ticket Canceled >>>\n") 
 
-def main():
-	recordTicket("Test")
 
-if __name__ == "__main__":
-	main()
-
+def recordTicket(conn):
+	try:
+		recordTicketImpl(conn)
+	except KeyboardInterrupt:
+		print("\n\n<<< Canceled Adding Violation Record >>>\n\n")

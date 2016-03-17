@@ -21,3 +21,15 @@ def hasPrimaryOwner(conn, serial, sin):
 		"SELECT count(*) FROM owner WHERE owner_id = '%s' AND vehicle_id = '%s' AND is_primary_owner = 'y'" %
 		(sin, serial))
 	return curs.fetchall()[0][0] > 0
+
+# Get one primary owner of the vehicle
+def getPrimaryOwner(conn, serial):
+	curs = conn.cursor()
+	curs.execute(
+		"SELECT owner_id FROM owner WHERE vehicle_id = '%s' AND is_primary_owner = 'y'" %
+		serial)
+	res = curs.fetchall()
+	if res:
+		return res[0][0]
+	else:
+		return None
