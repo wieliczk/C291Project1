@@ -57,7 +57,7 @@ def main():
 		elif intchose == 1:
 			newVehReg.setupVehicleReg(connection)
 		elif intchose == 2:
-			newDriver.setupDriver(connection)		
+			newDriver.newDriver(connection)		
 		elif intchose == 3:
 			autoTran.performTransaction(connection)
 		elif intchose == 4: 
