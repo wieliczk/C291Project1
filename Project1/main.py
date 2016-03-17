@@ -15,8 +15,8 @@ import searching
 # Ask the user to choose one of the main menu actions available
 def chooseMainMenuOption():
 	# User chooses which option
-	print("(1): New Vehicle Registration \n(2): Auto Transaction \n" \
-		  "(3): Driver Licence Registration \n(4): Violation Record \n" \
+	print("(1): New Vehicle Registration \n(2): Driver Licence Registration  \n" \
+		  "(3): Auto Transaction \n(4): Violation Record \n" \
 		  "(5): Search \n")
 	chooses = 0
 	while chooses == 0:
