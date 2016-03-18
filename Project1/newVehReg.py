@@ -104,7 +104,7 @@ def addOwnersPart(conn, vehicle_serial_no):
 
 		# Do they already own the vehicle?
 		if doesPersonOwnVehicle(conn, owner_id, vehicle_serial_no):
-			print("That person alraedy owns the vehicle.\n")
+			print("That person already owns the vehicle.\n")
 			continue
 
 		# Are they the primary owner?
