@@ -131,7 +131,7 @@ def personalInfo(conn):
 			chooses = int(input("(1): Search by name\n(2): Search by licence\n(3): Quit\n"))
 			if chooses == 1:
 				searchBy = str(input(("Enter name to search: \n")))
-				#searchBy = searchBy.lower()
+				searchBy = searchBy.lower()
 				personalByName(conn, searchBy)
 				# TODO check if we need to do more precise query to get diff people with same name or less info
 				# TODO does it matter if the result has their licence_no included? prob not
@@ -144,20 +144,21 @@ def personalInfo(conn):
 				while chooses == 2:
 					try:
 						searchBy = int(input(("Enter licence number to search: ")))
-						personalByLicence(conn, searchBy)
+						if licence.checkExists(conn, searchBy):
+							violationByLicence(conn, searchBy)	
+						else:
+							print("Licence number not registered")
 						searchBy = None
 						chooses = None
 						break
-					except Exception as e:
-						print(e)
+					except:
 						print("Not a valid number")
 
 			if chooses == 3:
 				quitcheck = 0
 				break
 
-		except Exception as e:
-			print(e)
+		except:
 			print("Invalid entry")
 	
 
@@ -187,8 +188,7 @@ def violationRecords(conn):
 						searchBy = None
 						chooses = None
 						break
-					except Exception as e:
-						print(e)
+					except:
 						print("Not a valid number")
 
 			if chooses == 2:
@@ -202,8 +202,7 @@ def violationRecords(conn):
 						searchBy = None
 						chooses = None
 						break
-					except Exception as e:
-						print(e)
+					except:
 						print("Not a valid number")
 			elif chooses == 3:
 				quitcheck = 0
@@ -232,12 +231,14 @@ def vehicleHist(conn):
 						searchBy = None
 						chooses = None
 						break
-					except ValueError:
+					except:
 						print("Not a valid number")
 
 			elif chooses == 2:
 				quitcheck = 0
 
+			else:
+				print("Not a valid choice")
 		except:
 				print("Not a valid choice")
 

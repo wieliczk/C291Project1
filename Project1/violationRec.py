@@ -57,7 +57,7 @@ def isValidViolator(conn, vehicle, sin):
 	if sin == "":
 		if vehicle.getPrimaryOwner(conn, vehicle):
 			return True
-		else
+		else:
 			return "Vehicle has no primary owner, must specify an owner"
 	else:
 		if person.checkExists(conn, sin):
@@ -67,7 +67,7 @@ def isValidViolator(conn, vehicle, sin):
 
 
 #
-def isValidOfficer(conn, sin):
+#def isValidOfficer(conn, sin):
 	
 
 
@@ -91,7 +91,7 @@ def recordTicketImpl(conn):
 	# Get the officer
 	officer_sin = userInput.getValidatedInput(
 		"Enter the recording officer SIN: ",
-		lambda result: )
+		lambda result: person.checkExists(conn, result))
 
 
 	while validationCheck == 1:
