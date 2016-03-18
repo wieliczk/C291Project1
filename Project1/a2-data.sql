@@ -15,6 +15,8 @@ INSERT INTO people VALUES
 	('127222563', 'Joe F', 133.67, 100.00, 'Brown', 'Black', '123 Edmonton AB', 'm', DATE '1990-05-06');
 INSERT INTO people VALUES
 	('127222560', 'SUV Owner', 133.67, 100.00, 'Brown', 'Black', '123 Ft Macmaurry AB', 'm', DATE '1980-05-06');
+INSERT INTO people VALUES
+	('127222860', 'SUV Owner', 133.67, 100.00, 'Brown', 'Black', '123 Ft Macmaurry AB', 'm', DATE '1980-05-06');
 
 
 INSERT INTO drive_licence VALUES

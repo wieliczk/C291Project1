@@ -1,3 +1,8 @@
 a2_setup_new.sql used to drop and create tables in database
+a2-data.sql both calls a2_setup_new.sql and populates test data
 
-the 5 options each have their own .py file that handles each function seperatly 
+main.py is the program entry point. Run as:
+python3 main.py
+
+Use Ctrl + C to cancel a current action and jump back to the previous menu at
+any point in the program.
