@@ -41,7 +41,7 @@ def isValidTicketType(conn, tType):
 # Checks if ticketID already exists 
 def checkTicExists(conn, ticketID):
 	curs = conn.cursor()
-	curs.execute("SELECT count(*) FROM ticket WHERE ticket_no = '%d'" % ticketID)
+	curs.execute("SELECT count(*) FROM ticket WHERE ticket_no = %d" % ticketID)
 	return curs.fetchall()[0][0] > 0
 
 # isvalidTicketID
@@ -53,9 +53,9 @@ def isValidTicketID(conn, ticketID):
 		return False
 
 #
-def isValidViolator(conn, vehicle, sin):
+def isValidViolator(conn, vin, sin):
 	if sin == "":
-		if vehicle.getPrimaryOwner(conn, vehicle):
+		if vehicle.getPrimaryOwner(conn, vin):
 			return True
 		else:
 			return "Vehicle has no primary owner, must specify an owner"
@@ -67,16 +67,26 @@ def isValidViolator(conn, vehicle, sin):
 
 
 #
-#def isValidOfficer(conn, sin):
-	
+def isValidOfficer(conn, sin):
+	if person.checkExists(conn, sin):
+		return True
+	else:
+		return "That officer does not exist"	
 
+
+#
+def getNextTicketNo(conn):
+	curs = conn.cursor()
+	ticket_no = curs.execute("SELECT max(ticket_no)+1 FROM ticket").fetchall()[0][0]
+	if ticket_no == None:
+		ticket_no = 0
+	return ticket_no
 
 
 # recordTicket
 # Main fuction to record a violation
 # Collects User inputs validating the ones that need to be checked
 # Once everything is correct adds to ticket
-# Note: Once you start process, there is not way to get out
 def recordTicketImpl(conn):
 	# First get VIN
 	vin = userInput.getValidatedInput(
@@ -91,59 +101,40 @@ def recordTicketImpl(conn):
 	# Get the officer
 	officer_sin = userInput.getValidatedInput(
 		"Enter the recording officer SIN: ",
-		lambda result: person.checkExists(conn, result))
+		lambda result: isValidOfficer(conn, result))
 
+	# Get the ticket type
+	vtype = userInput.getValidatedInput(
+		"Enter the type of violation: ",
+		lambda result: isValidTicketType(conn, result))
 
-	while validationCheck == 1:
-		officerID = userInput.getIntegerInput("Officer ID: ")
-		try:
-			if not person.checkExists(conn, officerID):
-				print("Incorrect Sin")
-			else:
-				validationCheck = 2
-		except:
-			print("SIN number not in database")
+	# Get the date
+	vdate = userInput.getDateInput(
+		"Enter the violation date (yyyy/mm/dd): ")
 
-	#TODO, same violation check for each necessary variable
+	# Get the place
+	location = input("Enter the place of violation (max 10 chars): ")
+	if len(location) > 10:
+		print("Warning: Input was greater than 10 characters, truncating.")
+	location = location[:10]
+
+	# Get the description
+	desc = input("Enter a description of the violation (max 1024 chars): ")
+	if len(desc) > 1024:
+		print("Warning: Input was greater than 1024 characters, truncating.")
+	desc = desc[:1024]
+
+	# Get ticket no
+	ticket_no = getNextTicketNo(conn)
 	
-	if validationCheck == 2:
-		# Vehicle ID is vehicle serial number
-		serial_no = userInput.getValidatedInput("Enter vehicle serial #: ",
-			lambda result: isValidSerialNo(conn, result))
+	# Do the insert
+	curs = conn.cursor()
+	curs.execute("INSERT INTO ticket VALUES "
+		"('%d', '%s', '%s', '%s', '%s', to_date('%s', 'yyyy/mm/dd'), '%s', '%s')" %
+		(ticket_no, violator_sin, vin, officer_sin, vtype, vdate, location, desc))
+	conn.commit()
 
-		# Vtype is from ticket type 
-		vtype = userInput.getValidatedInput("Enter ticket type: ",
-			lambda result: isValidTicketType(conn, result))
-
-		# Format the current date 
-		ticketDate = datetime.datetime.now()
-		ticketDate = "%s/%s/%s" % (ticketDate.year, ticketDate.month, ticketDate.day)
-		validationCheck = 3
-	else:
-		pass
-
-	# Make Sure Ticket ID is unique
-	while validationCheck == 3:
-		ticketType = userInput.getIntegerInput("Enter ticket ID: ")
-		validTicCheck = isValidTicketID(conn, ticketType)
-		if validTicCheck:
-			validationCheck = 4
-		else:
-			print("Ticket ID used")
-	while validationCheck == 4:
-		ticketPlace = input("Where the ticket occurred: ") 
-		description = input("Description for ticket: ")
-		validationCheck = 5
-
-	if validationCheck == 5:
-		curs = conn.cursor()
-		curs.execute("INSERT INTO ticket VALUES "
-			"('%d', '%s', '%s', '%s', '%s', to_date('%s', 'yyyy/mm/dd'), '%s', '%s')" %
-			(ticketType, violatID, serial_no, officerID, vtype, ticketDate, ticketPlace, description))
-		conn.commit()
-		print("<<< Ticket Registered >>>\n") 
-	else:
-		print("<<< Ticket Canceled >>>\n") 
+	print("<<< Ticket Registered >>>\n") 
 
 
 def recordTicket(conn):

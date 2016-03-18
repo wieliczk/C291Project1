@@ -55,5 +55,7 @@ def register(conn, sin):
 
 def hasLicence(conn, sin):
 	curs = conn.cursor()
-	curs.execute("SELECT count(*) FROM people, drive_licence WHERE drive_licence.sin=people.sin and people.sin = '%s'" % sin)
+	curs.execute(
+		"SELECT count(*) FROM people, drive_licence "
+		"WHERE drive_licence.sin = people.sin and people.sin = '%s'" % sin)
 	return curs.fetchall()[0][0] > 0

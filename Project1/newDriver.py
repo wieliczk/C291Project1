@@ -72,7 +72,7 @@ def newDriverImpl(conn):
 
 
 def addDriver(conn, sin):
-
+	#Licence no
 	licence_no = userInput.getValidatedInput("New Licence Number: ",
 		lambda result: isLicenceNumberValid(conn, result))
 
@@ -108,8 +108,8 @@ def addDriver(conn, sin):
 
 	# Add the licence
 	curs.execute("INSERT INTO drive_licence VALUES "
-		"'%s', '%s', '%s', :photo, to_date('%s', 'yyyy/mm/dd'), to_date('%s', 'yyyy/mm/dd')" % 
-		(licence_no, regist_sin, licence_class, issue_date, expiry_date),
+		"('%s', '%s', '%s', :photo, to_date('%s', 'yyyy/mm/dd'), to_date('%s', 'yyyy/mm/dd'))" % 
+		(licence_no, sin, licence_class, issue_date, expiry_date),
 		photo = photo_var)
 
 	# Add restrictions
